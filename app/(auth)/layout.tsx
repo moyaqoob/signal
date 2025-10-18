@@ -17,7 +17,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </section>
 
       <section className="auth-right-section text-white">
-        <blockquote className="z-20 font- text-5xl leading-12">
+        <blockquote className="z-20 font-normal text-5xl leading-12">
           &quot;Signalist turned my watchlist into a winning list.The alerts
           are spot-on, and I feel more confident making moves in the
           market.&quot;
