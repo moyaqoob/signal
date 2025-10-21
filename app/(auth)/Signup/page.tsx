@@ -7,9 +7,9 @@ import SelectField from "@/components/forms/SelectField";
 import {INVESTMENT_GOALS, PREFERRED_INDUSTRIES, RISK_TOLERANCE_OPTIONS} from "@/lib/config";
 import {CountrySelectField} from "@/components/forms/CountrySelectField";
 import FooterLink from "@/components/forms/FooterLink";
-import {signUpWithEmail} from "@/lib/config";
 import {useRouter} from "next/navigation";
 import {toast} from "sonner";
+import { signupEmail } from "@/app/api/auth.actions";
 
 const SignUp = () => {
     const router = useRouter()
@@ -33,7 +33,7 @@ const SignUp = () => {
 
     const onSubmit = async (data: SignUpFormData) => {
         try {
-            const result = await signUpWithEmail(data);
+            const result = await signupEmail(data);
             if(result.success) router.push('/');
         } catch (e) {
             console.error(e);
@@ -41,6 +41,7 @@ const SignUp = () => {
                 description: e instanceof Error ? e.message : 'Failed to create an account.'
             })
         }
+        // console.l og(data)
     }
 
     return (
@@ -118,7 +119,7 @@ const SignUp = () => {
                     {isSubmitting ? 'Creating Account' : 'Start Your Investing Journey'}
                 </Button>
 
-                <FooterLink text="Already have an account?" linkText="Sign in" href="/sign-in" />
+                <FooterLink text="Already have an account?" linkText="Sign in" href="/Signin" />
             </form>
         </>
     )

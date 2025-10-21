@@ -17,10 +17,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </section>
 
       <section className="auth-right-section text-white">
-        <blockquote className="z-20 font-normal text-5xl leading-12">
-          &quot;Signalist turned my watchlist into a winning list.The alerts
-          are spot-on, and I feel more confident making moves in the
-          market.&quot;
+        <blockquote className="z-20 font-mono text-4xl leading-12">
+          &quot;Signal turned my watchlist into a winning list.The alerts are
+          spot-on, and I feel more confident making moves in the market.&quot;
         </blockquote>
 
         <div className="flex justify-between p-4">
@@ -51,7 +50,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             className="border-6 border-gray-800 left-40 hidden h-auto max-w-none  lg:block rounded-xl w-[1024px] shadow-2xl absolute top-0"
           />
         </div>
-        
       </section>
     </main>
   );

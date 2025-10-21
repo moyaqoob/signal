@@ -3,7 +3,7 @@ import { MARKET_DATA_WIDGET_CONFIG, TOP_STORIES_WIDGET_CONFIG } from "@/lib/conf
 import {
   HEATMAP_WIDGET_CONFIG,
   MARKET_OVERVIEW_WIDGET_CONFIG,
-} from "@/utils/constants";
+} from "@/lib/config";
 import { useMemo } from "react";
 
 export default function Home() {

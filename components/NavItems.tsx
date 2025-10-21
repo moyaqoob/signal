@@ -1,5 +1,5 @@
 "use client";
-import { NAV_ITEMS } from "@/utils/utils";
+import { NAV_ITEMS } from "@/lib/config";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -20,7 +20,7 @@ const NavItems = () => {
               isActive(item.href) ? "text-gray-400":" "
             }`}
           >
-            {item.title}
+            {item.label}
           </Link>
         </li>
       ))}
