@@ -14,12 +14,14 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
 } from "./ui/dropdown-menu";
-
+import {auth} from "@/lib/better-auth/auth"
+import { searchStocks } from "@/app/api/finnhub.actions";
 const UserDropDown = () => {
   const router = useRouter();
   const handleSignOut = () => {
     router.replace("/sign-in");
   };
+  const initialStocks = searchStocks();
   const user = { name: "yaqoob", email: "abcd@gmail.com" };
   return (
     <DropdownMenu>
@@ -62,7 +64,7 @@ const UserDropDown = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-gray-600 mb-2 w-full h-[1px]" />
         <nav className="md:hidden ">
-          <NavItems />
+          <NavItems initialStocks={initialStocks} />
         </nav>
         <DropdownMenuSeparator className="bg-gray-600 mt-3 " />
         <DropdownMenuItem

@@ -6,7 +6,9 @@ import {
 import UserDropDown from "@/components/UserDropDown";
 import Image from "next/image";
 import Link from "next/link";
-const Header = () => {
+import { searchStocks } from "../api/finnhub.actions";
+const Header = async({user}:{user:User}) => {
+  const initialStocks = await searchStocks()
   return (
     <div className=" sticky top-0 header ">
       <div className="header-wrapper container">
@@ -21,7 +23,7 @@ const Header = () => {
           </Link>
         </div>
         <nav className="hidden md:block">
-          <NavItems />
+          <NavItems initialStocks={initialStocks}/>
         </nav>
         <div className="flex gap-3">
           <UserDropDown/>

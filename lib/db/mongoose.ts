@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const mongoURL = process.env.MONGO_URL;
+const mongoURL = process.env.MONGODB_URL;
 
 declare global{
     var mongooseCache:{

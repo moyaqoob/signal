@@ -17,6 +17,7 @@ const SignIn = () => {
    const onSubmit=async(data:SignInFormData)=>{
     try{
         setIsSubmit(true)
+        console.log("signup the account")
         await signInEmail(data)
         router.replace("/");
         toast.info(`Welcome ${data.email}`)
@@ -26,7 +27,7 @@ const SignIn = () => {
    }
    
   return <>
-            <h1 className="form-title">Sign Up & Personalize</h1>
+            <h1 className="form-title">Welcome Back</h1>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                

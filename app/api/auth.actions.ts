@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/better-auth/auth";
 import { inngest } from "@/lib/inngest/client";
-import { toast } from "sonner";
+import { headers } from "next/headers";
 
 export const signupEmail = async ({
   fullName,
@@ -52,13 +52,18 @@ export const signInEmail = async ({ email, password }: SignInFormData) => {
       },
     });
 
-    if (!response) {
-      return toast.error("Error occured while Signing up");
-    }
-
     return {success:true,data:response}
   } catch (e) {
     console.log("Signup failed", e);
-    return { success: false, error: "Sign up failed" };
+    return { success: false, error: "Sign in failed" };
   }
 };
+
+
+export const signOut = async()=>{
+  try{
+    await auth.api.signOut({headers:await headers()});
+  }catch(e){
+    throw new Error("Error while Signing out")
+  }
+}
