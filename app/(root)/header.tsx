@@ -1,8 +1,5 @@
 import NavItems from "@/components/NavItems";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import UserDropDown from "@/components/UserDropDown";
 import Image from "next/image";
 import Link from "next/link";
@@ -26,7 +23,7 @@ const Header = async({user}:{user:User}) => {
           <NavItems initialStocks={initialStocks}/>
         </nav>
         <div className="flex gap-3">
-          <UserDropDown/>
+          <UserDropDown user={user}/>
         </div>
       </div>
     </div>

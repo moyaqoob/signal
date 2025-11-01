@@ -5,6 +5,7 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import NavItems from "./NavItems";
 import { Avatar } from "./ui/avatar";
 import { Button } from "./ui/button";
@@ -14,15 +15,33 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
 } from "./ui/dropdown-menu";
-import {auth} from "@/lib/better-auth/auth"
-import { searchStocks } from "@/app/api/finnhub.actions";
-const UserDropDown = () => {
+import { Db } from "mongodb";
+import { signOut } from "@/app/api/auth.actions";
+const UserDropDown = ({user}:{user:User}) => {
   const router = useRouter();
   const handleSignOut = () => {
-    router.replace("/sign-in");
+    router.replace("/Signin");
   };
-  const initialStocks = searchStocks();
-  const user = { name: "yaqoob", email: "abcd@gmail.com" };
+  const [initialStocks, setInitialStocks] = useState<any[]>([]);
+  const initialUser = "fnkdn"
+
+  useEffect(() => {
+    let isMounted = true;
+    (async () => {
+      try {
+        const res = await fetch("/api/search");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (isMounted) setInitialStocks(Array.isArray(data) ? data : []);
+      } catch (e) {
+        // swallow - keep dropdown usable even if search fails
+        console.error("Failed to load initial stocks", e);
+      }
+    })();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -68,7 +87,7 @@ const UserDropDown = () => {
         </nav>
         <DropdownMenuSeparator className="bg-gray-600 mt-3 " />
         <DropdownMenuItem
-          onClick={handleSignOut}
+          onClick={signOut}
           className="text-md text-gray-500   rounded-md hover:text-gray-600 p-0 max-w-fit ml-1 hover:bg-gray-500"
         >
           Logout

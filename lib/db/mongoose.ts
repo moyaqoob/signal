@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const mongoURL = process.env.MONGODB_URL;
+const mongoURL = process.env.MONGODB_URI;
 
 declare global{
     var mongooseCache:{
@@ -32,6 +32,5 @@ export const connectToDatabase = async()=>{
         cached.promise = null;
         throw err;
     }
-    console.log(`Connected to database ${process.env.NODE_ENV}  - ${mongoURL}`)
     return cached.conn
 }

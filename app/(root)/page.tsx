@@ -8,7 +8,7 @@ import { useMemo } from "react";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen home-wrapper">
+    <div className="flex  min-h-screen home-wrapper">
       <section className="grid gap-8 home-section w-full">
         <div className="md:col-span-1 xl:col-span-1 ">
           <TradingViewWidget
