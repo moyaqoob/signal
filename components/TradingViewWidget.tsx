@@ -21,12 +21,12 @@ function TradingViewWidget({
   return (
     <div className={`w-full relative`}>
       {title && (
-        <div className=" absolute -top-8 left-2  font-semibold text-gray-100 text-2xl  pointer-events-none">
+        <div className="absolute -top-8 left-2 font-semibold text-gray-100 uppercase text-xl pointer-events-none">
           {title}
         </div>
       )}
       <div
-        className={`tradingview-widget-container`}
+        className={`tradingview-widget-container overflow-hidden`}
         ref={containerRef}
         style={{ height: "100%", width: "100%" }}
       >
@@ -35,6 +35,7 @@ function TradingViewWidget({
           style={{
             height,
             width: "100%",
+            overflow: "hidden",
             fontSize: scriptUrl.includes("symbol-profile") ? "16px" : undefined,
             lineHeight: scriptUrl.includes("symbol-profile")
               ? "1.5"

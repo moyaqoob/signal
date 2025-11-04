@@ -43,7 +43,7 @@ export async function getNews(
       .map((s) => s?.trim().toUpperCase())
       .filter((s): s is string => Boolean(s));
 
-    const maxArticles = 6;
+    const maxArticles = 5;
 
     // If we have symbols, try to fetch company news per symbol and round-robin select
     if (cleanSymbols.length > 0) {
