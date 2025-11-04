@@ -1,6 +1,6 @@
-"use client"
+"use client";
+import axios from "axios";
 import { useMemo, useState } from "react";
-import axios from "axios"
 
 const WatchlistButton = ({
   symbol,
@@ -17,17 +17,15 @@ const WatchlistButton = ({
     return added ? "Remove from Watchlist" : "Add to Watchlist";
   }, [added, type]);
 
-  const handleClick = async() => {
+  const handleClick = async () => {
     const next = !added;
     setAdded(next);
     onWatchlistChange?.(symbol, next);
     !isInWatchlist;
-  
-    if(next){
-      const data = await axios.post(`/api/stocks/${symbol}`)
-      console.log("stocks data", data);
+
+    if (next) {
+      await axios.post(`/api/stocks/${symbol}`);
     }
-    
   };
 
   if (type === "icon") {
