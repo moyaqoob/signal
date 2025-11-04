@@ -64,7 +64,9 @@ Secure sign-in and session management with `better-auth` and server-side protect
 
 ## ⚙️ Setup Instructions
 
-### 1️⃣ Clone the Repo
+### 1️⃣ Clone the Repo 
 ```bash
-git clone https://github.com/yourusername/signal.git
+git clone https://github.com/moyaqoob/signal.git
 cd signal
+npm install
+npm run dev 
