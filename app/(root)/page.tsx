@@ -4,7 +4,6 @@ import {
   HEATMAP_WIDGET_CONFIG,
   MARKET_OVERVIEW_WIDGET_CONFIG,
 } from "@/lib/config";
-import { useMemo } from "react";
 
 export default function Home() {
   return (

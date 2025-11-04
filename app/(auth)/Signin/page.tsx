@@ -2,9 +2,7 @@
 import { signInEmail } from "@/app/api/auth.actions";
 import FooterLink from "@/components/forms/FooterLink";
 import InputField from "@/components/forms/InputField";
-import SelectField from "@/components/SelectField";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -35,7 +33,7 @@ const SignIn = () => {
                 <InputField
                     name="email"
                     label="Email"
-                    placeholder="contact@jsmastery.com"
+                    placeholder="contact@yaqoob.com"
                     register={register}
                     error={Error}
                     validation={{ required: 'Email name is required', pattern: /^\w+@\w+\.\w+$/, message: 'Email address is required' }}

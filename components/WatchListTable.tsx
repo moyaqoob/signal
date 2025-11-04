@@ -33,7 +33,6 @@ import { toast } from "react-hot-toast";
 import { Button } from "./ui/button";
 const WatchListTable = () => {
   const [stocks, setStocks] = useState<StockWithData[]>([]);
-  const [action, setAction] = useState();
   console.log("stocks  from watchlist", stocks);
 
   useEffect(() => {

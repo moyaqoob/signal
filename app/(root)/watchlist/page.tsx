@@ -4,13 +4,8 @@ import NewsModal from "@/components/NewsModal";
 import TradingViewWidget from "@/components/TradingViewWidget";
 import WatchListTable from "@/components/WatchListTable";
 import { TOP_STORIES_WIDGET_CONFIG } from "@/lib/config";
-import axios from "axios";
 import { useEffect, useState } from "react";
 const page = () => {
-  const [stocks, setStocks] = useState("");
-  const [open, setOpen] = useState(false);
-  const [symbol, setSymbol] = useState("");
-  const [price, setPrice] = useState("");
   const [news, setNews] = useState<MarketNewsArticle[]>([]);
 
   useEffect(() => {
@@ -24,19 +19,8 @@ const page = () => {
     };
 
     fetchNews();
-  }, [symbol]);
-
-  useEffect(() => {
-    const fetchWatchlist = async () => {
-      try {
-        const res = await axios.post("/api/watchlist");
-        setStocks(res.data.data); // assuming your API returns { success, data: [...] }
-      } catch (err) {
-        console.error("Failed to fetch watchlist:", err);
-      }
-    };
-    fetchWatchlist();
   }, []);
+
 
   return (
     <div className=" ">

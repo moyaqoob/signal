@@ -1,4 +1,3 @@
-// @ts-ignore
 "use client";
 
 import { searchStocks } from "@/app/api/finnhub.actions";
@@ -11,7 +10,7 @@ import {
 import { useDebounce } from "@/hooks/useDebounce";
 import { TrendingUp } from "lucide-react";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "../../../components/ui/button";
 
 const SearchCommand = ({

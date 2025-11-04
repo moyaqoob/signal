@@ -1,6 +1,4 @@
-"use client";
-import { AddFetchStockDetails } from "@/app/api/finnhub.actions";
-import useTradingViewWidget from "@/hooks/useTradingViewWidget";
+"use client"
 import { useMemo, useState } from "react";
 import axios from "axios"
 
