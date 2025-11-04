@@ -11,8 +11,9 @@ import {
 import { useDebounce } from "@/hooks/useDebounce";
 import { TrendingUp } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "../../../components/ui/button";
+
 const SearchCommand = ({
   renderAs = "button",
   label = "Add stock",
@@ -26,19 +27,23 @@ const SearchCommand = ({
   const isSearchMode = !!searchTerm.trim();
 
   const displayStocks = isSearchMode ? stocks : stocks.slice(0, 5);
-  const handleSearch = async () => {
-    if (!isSearchMode) return setstocks(initialStocks);
+  const handleSearch = useCallback(async () => {
+    if (!isSearchMode) {
+      setstocks(initialStocks);
+      return;
+    }
+
     setLoading(true);
     try {
       const results = await searchStocks(searchTerm.trim());
-      console.log("results", results);
       setstocks(results);
-    } catch {
+    } catch (error) {
+      console.error("Error searching stocks:", error);
       setstocks([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [isSearchMode, searchTerm, initialStocks]);
 
   const debouncedSearch = useDebounce(handleSearch, 300);
 

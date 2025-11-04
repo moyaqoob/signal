@@ -1,4 +1,5 @@
 import { AddFetchStockDetails } from "@/app/api/finnhub.actions";
+import { WatchListModel } from "@/lib/db/models/WatchListModel";
 import { NextResponse } from "next/server";
 
 export async function POST(
@@ -6,7 +7,7 @@ export async function POST(
   { params }: { params: { symbol: string } }
 ) {
   const { symbol } = params;
- console.log("symbol",symbol)
+  console.log("symbol", symbol);
   try {
     const profile = await AddFetchStockDetails(symbol);
 

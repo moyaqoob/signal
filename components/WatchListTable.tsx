@@ -1,4 +1,15 @@
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -16,10 +27,14 @@ import {
 import { WATCHLIST_TABLE_HEADER } from "@/lib/config";
 import axios from "axios";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import { Button } from "./ui/button";
 const WatchListTable = () => {
-  const [stocks, setStocks] = useState([]);
+  const [stocks, setStocks] = useState<StockWithData[]>([]);
   const [action, setAction] = useState();
+  console.log("stocks  from watchlist", stocks);
 
   useEffect(() => {
     const fetchWatchlist = async () => {
@@ -33,8 +48,41 @@ const WatchListTable = () => {
     fetchWatchlist();
   }, []);
 
-  const handleAction = (id: number, value: string) => {
-    console.log(id, value);
+  const router = useRouter();
+  const handleAction = async(id: string, action: string) => {
+    try{
+      await axios.patch("/api/action/",{
+        id,
+        action
+       })
+
+       router.refresh()
+      
+    }catch(err){
+      console.error("Error updating the stock")
+      
+    }
+
+   
+  };
+
+  const handleDelete = async (id: string, symbol: string) => {
+    try {
+      const res = await axios.delete(`/api/watchlist/`, {
+        data: {
+          id: id,
+        },
+      });
+      if (res.status) {
+        toast(`${symbol} has been deleted successfully`, {
+          position: "bottom-right",
+        });
+        setStocks((prev) => prev.filter((stocks) => stocks._id !== id));
+      }
+    } catch (err) {
+      console.error("Error deleting the stock");
+      throw new Error("Error Deleting the Stock");
+    }
   };
 
   return (
@@ -55,9 +103,14 @@ const WatchListTable = () => {
         <TableBody>
           {stocks?.map((stock: any, idx: number) => (
             <TableRow key={stock._id}>
-                <TableCell>
-                        <Image src={"/images/star.png"} alt="star Image" width={20} height={20}/>
-                </TableCell>
+              <TableCell>
+                <Image
+                  src={"/images/star.png"}
+                  alt="star Image"
+                  width={20}
+                  height={20}
+                />
+              </TableCell>
               <TableCell className="font-medium">
                 {stock.company ?? stock.symbol}
               </TableCell>
@@ -78,42 +131,69 @@ const WatchListTable = () => {
                 <Select
                   onValueChange={(value) => handleAction(stock._id, value)}
                 >
-                  <SelectTrigger className="w-[150px] text-white ">
+                  <SelectTrigger className="w-[150px] text-white">
                     <SelectValue
                       placeholder={stock.action}
                       className="text-xl"
                     />
                   </SelectTrigger>
+
                   <SelectContent className="bg-black text-white font-medium w-46 rounded-xl p-2">
-                    <SelectItem
-                      value="buy"
-                      className="h-10 w-full rounded-md transition-colors duration-150 hover:bg-red-700 focus:bg-red-700"
-                    >
-                      Buy
-                    </SelectItem>
-                    <SelectItem
-                      value="sell"
-                      className="h-10 w-full rounded-md transition-colors duration-150 hover:bg-green-700 focus:bg-green-700"
-                    >
-                      Sell
-                    </SelectItem>
-                    <SelectItem
-                      value="hold"
-                      className="h-10 w-full rounded-md transition-colors duration-150 hover:bg-blue-700 focus:bg-blue-700"
-                    >
-                      Hold
-                    </SelectItem>
+                    {stock.action !== "Buy" && (
+                      <SelectItem
+                        value="Buy"
+                        className="h-10 w-full rounded-md transition-colors duration-150 hover:bg-red-700 focus:bg-red-700"
+                      >
+                        Buy
+                      </SelectItem>
+                    )}
+
+                    {stock.action !== "Sell" && (
+                      <SelectItem
+                        value="Sell"
+                        className="h-10 w-full rounded-md transition-colors duration-150 hover:bg-green-700/50 focus:bg-green-700"
+                      >
+                        Sell
+                      </SelectItem>
+                    )}
+
+                    {stock.action !== "Hold" && (
+                      <SelectItem
+                        value="Hold"
+                        className="h-10 w-full rounded-md transition-colors duration-150 hover:bg-blue-700 focus:bg-blue-700"
+                      >
+                        Hold
+                      </SelectItem>
+                    )}
                   </SelectContent>
                 </Select>
               </TableCell>
               <TableCell>
-                {/* Action: remove or manage - placeholder button */}
-                <button
-                  className="text-md text-white px-4 py-2  bg-orange-600 rounded-lg"
-                  onClick={() => console.log("remove", stock)}
-                >
-                    Remove
-                </button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive">Delete</Button>
+                  </AlertDialogTrigger>
+
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete Stock</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to delete{" "}
+                        <span className="font-semibold">{stock.symbol}</span>?
+                        This action cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => handleDelete(stock._id, stock.symbol)}
+                      >
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </TableCell>
             </TableRow>
           ))}
@@ -125,7 +205,7 @@ const WatchListTable = () => {
 
 export default WatchListTable;
 
-// table to pass the data of fav stocks
-// hold buy and sell and update to the backend
-// And select unselect and update the backend.
-// get the article to show on the side bar.
+// table to pass the data of fav stocks done
+// hold buy and sell and update to the backend pending
+// And select unselect and update the backend. pending
+// get the article to show on the side bar. pending

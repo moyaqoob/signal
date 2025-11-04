@@ -139,6 +139,7 @@ declare global {
 
   type StockWithData = {
     userId: string;
+    _id:string;
     symbol: string;
     company: string;
     addedAt: Date;

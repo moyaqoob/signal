@@ -2,6 +2,9 @@ import { auth } from "@/lib/better-auth/auth";
 import { headers } from "next/headers";
 import Header from "./header";
 import { redirect } from "next/navigation";
+import { Toaster } from "react-hot-toast"
+
+
 
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
@@ -21,6 +24,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
     <div className="min-h-screen text-gray-400">
       <Header user={user} />
       <div className="container py-10">{children}</div>
+      <Toaster/>
     </div>
   );
 };
