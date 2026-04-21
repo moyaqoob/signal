@@ -35,7 +35,6 @@ yarn-error.log*
 <<<<<<< HEAD
 
 # local env files
-.env*.local
 .env
 =======
 .pnpm-debug.log*

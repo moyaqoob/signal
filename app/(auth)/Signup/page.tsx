@@ -38,7 +38,6 @@ const SignUp = () => {
   const onSubmit = async (data: SignUpFormData) => {
     try {
       const result = await signupEmail(data);
-      console.log("signup the account");
       if (result.success) router.push("/");
     } catch (e) {
       console.error(e);
@@ -47,12 +46,12 @@ const SignUp = () => {
           e instanceof Error ? e.message : "Failed to create an account.",
       });
     }
-    // console.l og(data)
   };
 
   return (
     <>
-      <h1 className="form-title">Sign Up & Personalize</h1>
+      <h1 className="form-title">Create Account</h1>
+      <p className="form-subtitle">SIGNAL PRO · PERSONALIZE YOUR FEED</p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <InputField
@@ -67,20 +66,20 @@ const SignUp = () => {
         <InputField
           name="email"
           label="Email"
-          placeholder="contact@jsmastery.com"
+          placeholder="you@example.com"
           register={register}
           error={errors.email}
           validation={{
-            required: "Email name is required",
+            required: "Email is required",
             pattern: /^\w+@\w+\.\w+$/,
-            message: "Email address is required",
+            message: "Enter a valid email",
           }}
         />
 
         <InputField
           name="password"
           label="Password"
-          placeholder="Enter a strong password"
+          placeholder="············"
           type="password"
           register={register}
           error={errors.password}
@@ -130,7 +129,7 @@ const SignUp = () => {
           disabled={isSubmitting}
           className="yellow-btn w-full mt-5"
         >
-          {isSubmitting ? "Creating Account" : "Start Your Investing Journey"}
+          {isSubmitting ? "Setting Up Terminal..." : "Start Your Investing Journey"}
         </Button>
 
         <FooterLink
@@ -142,4 +141,5 @@ const SignUp = () => {
     </>
   );
 };
+
 export default SignUp;
