@@ -141,6 +141,26 @@
   }
 }
 
+.status-pill-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #D4F73B;
+  text-transform: uppercase;
+}
+.home-wrapper {
+  padding: 20px 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+}
+@media (max-width: 1100px) {
+  .home-wrapper { flex-direction: column; }
+  .home-wrapper section:last-child { width: 100% !important; }
+}
 @layer utilities {
   .container {
     @apply mx-auto max-w-screen px-4 md:px-6 lg:px-8;
@@ -148,9 +168,7 @@
   .yellow-btn {
     @apply h-12 cursor-pointer bg-gradient-to-b from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-400 text-gray-950 font-medium text-base rounded-lg shadow-lg disabled:opacity-50;
   }
-  .home-wrapper {
-    @apply text-gray-400 flex-col  gap-4 md:gap-10 items-center sm:items-start;
-  }
+
   .home-section {
     @apply w-full gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-3;
   }
@@ -159,7 +177,7 @@
   }
 
   .header-wrapper {
-    @apply flex justify-between items-center px-3 py-0 -top-5 relative text-gray-500;
+    @apply flex justify-between items-center px-3 py-5 -top-5 relative text-gray-500;
   }
   .auth-layout {
     @apply flex flex-col justify-end lg:flex-row h-screen bg-gray-900 relative overflow-hidden;

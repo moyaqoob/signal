@@ -1,127 +1,74 @@
 "use client";
-import { getNews } from "@/app/api/finnhub.actions";
-import NewsModal from "@/components/NewsModal";
-import TradingViewWidget from "@/components/TradingViewWidget";
-import WatchListTable from "@/components/WatchListTable";
-import { TOP_STORIES_WIDGET_CONFIG } from "@/lib/config";
-import { useEffect, useState } from "react";
+import axios from "axios";
+import { useMemo, useState } from "react";
 
-const WatchlistPage = () => {
-  const [news, setNews] = useState<MarketNewsArticle[]>([]);
-  const [newsLoading, setNewsLoading] = useState(true);
+const WatchlistButton = ({
+  symbol,
+  company,
+  isInWatchlist,
+  showTrashIcon = false,
+  type = "button",
+  onWatchlistChange,
+}: WatchlistButtonProps) => {
+  const [added, setAdded] = useState<boolean>(!!isInWatchlist);
 
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const data = await getNews();
-        setNews(data);
-      } catch (err) {
-        console.error("Error fetching the news", err);
-      } finally {
-        setNewsLoading(false);
-      }
-    };
-    fetchNews();
-  }, []);
+  const label = useMemo(() => {
+    if (type === "icon") return "";
+    return added ? "Remove from Watchlist" : "+ Add to Watchlist";
+  }, [added, type]);
+
+  const handleClick = async () => {
+    const next = !added;
+    setAdded(next);
+    onWatchlistChange?.(symbol, next);
+    if (next) {
+      await axios.post(`/api/stocks/${symbol}`);
+    }
+  };
+
+  if (type === "icon") {
+    return (
+      <button
+        title={added ? `Remove ${symbol}` : `Add ${symbol}`}
+        aria-label={added ? `Remove ${symbol} from watchlist` : `Add ${symbol} to watchlist`}
+        className={`watchlist-icon-btn ${added ? "watchlist-icon-added" : ""}`}
+        onClick={handleClick}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill={added ? "#D4F73B" : "none"}
+          stroke="#D4F73B"
+          strokeWidth="1.5"
+          className="watchlist-star"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.385a.563.563 0 00-.182-.557L3.04 10.385a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345l2.125-5.111z"
+          />
+        </svg>
+      </button>
+    );
+  }
 
   return (
-    <div className="page-content" style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-
-      {/* ── TOP SECTION ─────────────────────────────── */}
-      <div className="watchlist-layout">
-        {/* Table */}
-        <div className="flex flex-col gap-3">
-          <div style={{ display: "flex", alignItems: "center", gap: "12px", paddingBottom: "4px" }}>
-            <h1 className="page-heading">Watchlist</h1>
-            <span className="status-pill-live">
-              <span className="status-dot" style={{ color: "#D4F73B" }} />
-              LIVE
-            </span>
-          </div>
-          <WatchListTable />
-        </div>
-
-        {/* TradingView Timeline */}
-        <div className="terminal-card overflow-hidden">
-          <div className="terminal-card-header">
-            <span className="section-label">Market News</span>
-          </div>
-          <TradingViewWidget
-            scriptUrl="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js"
-            config={TOP_STORIES_WIDGET_CONFIG}
-            height={700}
-          />
-        </div>
-      </div>
-
-      {/* ── NEWS STRIP ──────────────────────────────── */}
-      <div>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
-          <span className="section-label">Latest Intelligence</span>
-          {newsLoading && (
-            <span style={{ fontSize: "9px", color: "#333", letterSpacing: "0.1em" }}>LOADING...</span>
-          )}
-        </div>
-        <div className="news-strip">
-          {news.length === 0 && !newsLoading
-            ? (
-              <p style={{ fontSize: "11px", color: "#333", padding: "20px 0" }}>No news available.</p>
-            )
-            : news.map((item) => (
-              <NewsModal
-                key={item.id}
-                id={item.id}
-                headline={item.headline}
-                summary={item.summary}
-                source={item.source}
-                url={item.url}
-                datetime={item.datetime}
-                category={item.category}
-                related={item.related}
-              />
-            ))}
-        </div>
-      </div>
-
-      <style>{`
-        .watchlist-layout {
-          display: grid;
-          grid-template-columns: 1fr 380px;
-          gap: 20px;
-          align-items: start;
-        }
-        @media (max-width: 1000px) {
-          .watchlist-layout { grid-template-columns: 1fr; }
-        }
-        .page-heading {
-          font-size: 16px;
-          font-weight: 700;
-          letter-spacing: -0.02em;
-          color: #e8e8e0;
-          font-family: var(--font, monospace);
-        }
-        .status-pill-live {
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          font-size: 8px;
-          font-weight: 700;
-          letter-spacing: 0.14em;
-          color: #D4F73B;
-          text-transform: uppercase;
-          font-family: var(--font, monospace);
-        }
-        .news-strip {
-          display: flex;
-          gap: 12px;
-          overflow-x: auto;
-          padding-bottom: 8px;
-        }
-        .news-strip::-webkit-scrollbar { height: 3px; }
-        .news-strip::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 2px; }
-      `}</style>
-    </div>
+    <button
+      className={`watchlist-btn ${added ? "watchlist-remove" : ""}`}
+      onClick={handleClick}
+    >
+      {showTrashIcon && added ? (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" style={{ width: "14px", height: "14px" }}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 7h12M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m-7 4v6m4-6v6m4-6v6" />
+        </svg>
+      ) : (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" style={{ width: "14px", height: "14px" }}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.385a.563.563 0 00-.182-.557L3.04 10.385a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345l2.125-5.111z" />
+        </svg>
+      )}
+      <span>{label}</span>
+    </button>
   );
 };
 
-export default WatchlistPage;
+export default WatchlistButton;
